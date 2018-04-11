@@ -4,3 +4,4 @@ A simple barchart which has a mouseover and mouseout event on its bars
 
 * small fix for mouseover on Labels
 * color changing back and forth depending on where the mousepointer is
+* sorting functionality on click in ascending and descending order depending on its status

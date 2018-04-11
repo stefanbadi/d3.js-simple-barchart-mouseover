@@ -3,6 +3,7 @@
 var data = [6, 20, 21, 14, 2, 30, 7, 16, 25, 5, 11, 28, 10, 26, 9];
 
 // Create SVG Element
+var sortflag = false;
 var chart_width = 800;
 var chart_height = 400;
 var svg = d3
@@ -55,8 +56,38 @@ svg
   .on('mouseout', function() {
     d3
       .select(this)
-      .transition()
+      //assign name to transition to avoid conflicts
+      .transition('change_color_back')
       .attr('fill', '#7ED26D');
+  })
+  .on('click', function() {
+    //need all elements
+    //create a function to compare
+    svg
+      .selectAll('rect')
+      .sort(function(a, b) {
+        return sortflag ? d3.descending(a, b) : d3.ascending(a, b);
+      })
+      .transition('sort')
+      .duration(1000)
+      //after the sorting, update the rect positions on x axis
+      .attr('x', function(d, i) {
+        return x_scale(i);
+      });
+    //now, the same needed for the text labels
+    svg
+      .selectAll('text')
+      .sort(function(a, b) {
+        return sortflag ? d3.descending(a, b) : d3.ascending(a, b);
+      })
+      .transition('sort-label')
+      .duration(1000)
+      //after the sorting, update the rect positions on x axis
+      .attr('x', function(d, i) {
+        return x_scale(i) + x_scale.bandwidth() / 2;
+      });
+    //set sortflag to its opposite value
+    sortflag = !sortflag;
   });
 
 // Create Labels
